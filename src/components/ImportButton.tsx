@@ -8,12 +8,15 @@ import { useState } from "react";
 export const ImportButton = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
     setIsLoading(true);
+    setProgress(0);
+    
     try {
       await importBoxScores(file);
       toast({
@@ -29,6 +32,7 @@ export const ImportButton = () => {
       });
     } finally {
       setIsLoading(false);
+      setProgress(0);
     }
   };
 

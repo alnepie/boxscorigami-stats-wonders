@@ -1,6 +1,8 @@
 
 import { supabase } from "@/integrations/supabase/client";
 
+const CHUNK_SIZE = 100; // Number of records to process at once
+
 export const importBoxScores = async (file: File) => {
   const reader = new FileReader();
   
@@ -8,27 +10,32 @@ export const importBoxScores = async (file: File) => {
     reader.onload = async (event) => {
       try {
         const csvText = event.target?.result as string;
-        // Basic CSV parsing (you might want to use a more robust CSV parser)
         const lines = csvText.split('\n');
         const headers = lines[0].split(',');
+        const totalRows = lines.length - 1;
         
-        const csvData = lines.slice(1).map(line => {
-          const values = line.split(',');
-          return headers.reduce((obj, header, index) => {
-            obj[header.trim()] = values[index]?.trim();
-            return obj;
-          }, {} as Record<string, string>);
-        });
+        // Process data in chunks
+        for (let i = 1; i < lines.length; i += CHUNK_SIZE) {
+          const chunkLines = lines.slice(i, i + CHUNK_SIZE);
+          const csvData = chunkLines.map(line => {
+            const values = line.split(',');
+            return headers.reduce((obj, header, index) => {
+              obj[header.trim()] = values[index]?.trim();
+              return obj;
+            }, {} as Record<string, string>);
+          });
 
-        const { data: functionData, error: functionError } = await supabase.functions.invoke(
-          'import-boxscores',
-          {
-            body: { csvData }
-          }
-        );
+          const { data: functionData, error: functionError } = await supabase.functions.invoke(
+            'import-boxscores',
+            {
+              body: { csvData }
+            }
+          );
 
-        if (functionError) throw functionError;
-        resolve(functionData);
+          if (functionError) throw functionError;
+        }
+
+        resolve({ message: 'Import completed successfully' });
       } catch (error) {
         reject(error);
       }

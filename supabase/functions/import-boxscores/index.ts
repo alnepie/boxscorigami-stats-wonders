@@ -8,7 +8,6 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -20,35 +19,39 @@ serve(async (req) => {
     );
 
     const { csvData } = await req.json();
+    
+    // Process in smaller batches to prevent timeouts
+    const BATCH_SIZE = 25;
+    for (let i = 0; i < csvData.length; i += BATCH_SIZE) {
+      const batch = csvData.slice(i, i + BATCH_SIZE);
+      const records = batch.map(row => ({
+        player_name: row.Player,
+        game_date: row.Date,
+        team: row.Team,
+        opponent: row.Opponent,
+        points: parseInt(row.PTS),
+        rebounds: parseInt(row.TRB),
+        assists: parseInt(row.AST),
+        steals: parseInt(row.STL),
+        blocks: parseInt(row.BLK),
+        turnovers: parseInt(row.TOV),
+        field_goals_made: parseInt(row.FG),
+        field_goals_attempted: parseInt(row.FGA),
+        three_pointers_made: parseInt(row['3P']),
+        three_pointers_attempted: parseInt(row['3PA']),
+        free_throws_made: parseInt(row.FT),
+        free_throws_attempted: parseInt(row.FTA),
+        minutes_played: row.MP
+      }));
 
-    // Parse CSV data (assuming it's an array of objects)
-    for (const row of csvData) {
-      const { data, error } = await supabaseClient
+      const { error } = await supabaseClient
         .from('box_scores')
-        .upsert({
-          player_name: row.Player,
-          game_date: row.Date,
-          team: row.Team,
-          opponent: row.Opponent,
-          points: parseInt(row.PTS),
-          rebounds: parseInt(row.TRB),
-          assists: parseInt(row.AST),
-          steals: parseInt(row.STL),
-          blocks: parseInt(row.BLK),
-          turnovers: parseInt(row.TOV),
-          field_goals_made: parseInt(row.FG),
-          field_goals_attempted: parseInt(row.FGA),
-          three_pointers_made: parseInt(row['3P']),
-          three_pointers_attempted: parseInt(row['3PA']),
-          free_throws_made: parseInt(row.FT),
-          free_throws_attempted: parseInt(row.FTA),
-          minutes_played: row.MP
-        }, {
+        .upsert(records, {
           onConflict: 'player_name,game_date,team,opponent'
         });
 
       if (error) {
-        console.error('Error inserting row:', error);
+        console.error('Error inserting batch:', error);
         throw error;
       }
     }
