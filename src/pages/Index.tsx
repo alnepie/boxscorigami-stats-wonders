@@ -1,6 +1,7 @@
 
 import { Search } from "@/components/Search";
 import { StatCard } from "@/components/StatCard";
+import { ImportButton } from "@/components/ImportButton";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useBoxScores } from "@/hooks/useBoxScores";
@@ -37,6 +38,9 @@ const Index = () => {
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Discover unique NBA stat lines that have only happened once in league history.
           </p>
+          <div className="flex justify-center">
+            <ImportButton />
+          </div>
         </motion.div>
 
         <Search value={searchQuery} onChange={setSearchQuery} />
