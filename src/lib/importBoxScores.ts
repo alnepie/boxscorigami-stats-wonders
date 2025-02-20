@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 const CHUNK_SIZE = 100; // Number of records to process at once
 
-export const importBoxScores = async (file: File) => {
+export const importBoxScores = async (file: File, onProgress?: (progress: number) => void) => {
   const reader = new FileReader();
   
   return new Promise((resolve, reject) => {
@@ -33,6 +33,10 @@ export const importBoxScores = async (file: File) => {
           );
 
           if (functionError) throw functionError;
+
+          // Calculate and report progress
+          const progress = Math.min(Math.round((i + CHUNK_SIZE) / lines.length * 100), 100);
+          onProgress?.(progress);
         }
 
         resolve({ message: 'Import completed successfully' });
