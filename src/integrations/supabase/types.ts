@@ -9,7 +9,75 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      box_scores: {
+        Row: {
+          assists: number
+          blocks: number
+          created_at: string | null
+          field_goals_attempted: number
+          field_goals_made: number
+          free_throws_attempted: number
+          free_throws_made: number
+          game_date: string
+          id: string
+          is_unique: boolean | null
+          minutes_played: string | null
+          opponent: string
+          player_name: string
+          points: number
+          rebounds: number
+          steals: number
+          team: string
+          three_pointers_attempted: number
+          three_pointers_made: number
+          turnovers: number
+        }
+        Insert: {
+          assists: number
+          blocks: number
+          created_at?: string | null
+          field_goals_attempted: number
+          field_goals_made: number
+          free_throws_attempted: number
+          free_throws_made: number
+          game_date: string
+          id?: string
+          is_unique?: boolean | null
+          minutes_played?: string | null
+          opponent: string
+          player_name: string
+          points: number
+          rebounds: number
+          steals: number
+          team: string
+          three_pointers_attempted: number
+          three_pointers_made: number
+          turnovers: number
+        }
+        Update: {
+          assists?: number
+          blocks?: number
+          created_at?: string | null
+          field_goals_attempted?: number
+          field_goals_made?: number
+          free_throws_attempted?: number
+          free_throws_made?: number
+          game_date?: string
+          id?: string
+          is_unique?: boolean | null
+          minutes_played?: string | null
+          opponent?: string
+          player_name?: string
+          points?: number
+          rebounds?: number
+          steals?: number
+          team?: string
+          three_pointers_attempted?: number
+          three_pointers_made?: number
+          turnovers?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

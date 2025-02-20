@@ -2,32 +2,22 @@
 import { Search } from "@/components/Search";
 import { StatCard } from "@/components/StatCard";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { useBoxScores } from "@/hooks/useBoxScores";
+import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
-  // Example data - in a real app, this would come from an API
-  const statLines = [
-    {
-      player: "Nikola Jokić",
-      date: "March 15, 2024",
-      points: 25,
-      rebounds: 17,
-      assists: 12,
-    },
-    {
-      player: "Joel Embiid",
-      date: "March 14, 2024",
-      points: 35,
-      rebounds: 15,
-      assists: 8,
-    },
-    {
-      player: "Luka Dončić",
-      date: "March 13, 2024",
-      points: 30,
-      rebounds: 12,
-      assists: 15,
-    },
-  ];
+  const [searchQuery, setSearchQuery] = useState("");
+  const { data: boxScores, isLoading, error } = useBoxScores(searchQuery);
+  const { toast } = useToast();
+
+  if (error) {
+    toast({
+      variant: "destructive",
+      title: "Error",
+      description: "Failed to fetch box scores. Please try again later.",
+    });
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted">
@@ -49,13 +39,17 @@ const Index = () => {
           </p>
         </motion.div>
 
-        <Search />
+        <Search value={searchQuery} onChange={setSearchQuery} />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {statLines.map((stat, index) => (
-            <StatCard key={index} {...stat} />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="text-center text-muted-foreground">Loading box scores...</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {boxScores?.map((stat) => (
+              <StatCard key={stat.id} {...stat} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

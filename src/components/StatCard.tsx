@@ -1,15 +1,20 @@
 
 import { motion } from "framer-motion";
+import { format } from "date-fns";
 
 interface StatCardProps {
-  player: string;
-  date: string;
+  player_name: string;
+  game_date: string;
+  team: string;
+  opponent: string;
   points: number;
   rebounds: number;
   assists: number;
 }
 
-export const StatCard = ({ player, date, points, rebounds, assists }: StatCardProps) => {
+export const StatCard = ({ player_name, game_date, team, opponent, points, rebounds, assists }: StatCardProps) => {
+  const formattedDate = format(new Date(game_date), "MMMM d, yyyy");
+  
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -20,10 +25,10 @@ export const StatCard = ({ player, date, points, rebounds, assists }: StatCardPr
       <div className="space-y-4">
         <div className="space-y-2">
           <span className="text-xs font-medium text-primary px-2 py-1 bg-primary/10 rounded-full">
-            Unique Stat Line
+            {team} vs {opponent}
           </span>
-          <h3 className="text-xl font-semibold text-foreground">{player}</h3>
-          <p className="text-sm text-muted-foreground">{date}</p>
+          <h3 className="text-xl font-semibold text-foreground">{player_name}</h3>
+          <p className="text-sm text-muted-foreground">{formattedDate}</p>
         </div>
         <div className="grid grid-cols-3 gap-4">
           <div className="text-center">

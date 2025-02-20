@@ -2,7 +2,12 @@
 import { Search as SearchIcon } from "lucide-react";
 import { motion } from "framer-motion";
 
-export const Search = () => {
+interface SearchProps {
+  value: string;
+  onChange: (value: string) => void;
+}
+
+export const Search = ({ value, onChange }: SearchProps) => {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -14,6 +19,8 @@ export const Search = () => {
         <SearchIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
         <input
           type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
           placeholder="Search for players or stat lines..."
           className="w-full pl-10 pr-4 py-3 rounded-full bg-white/80 backdrop-blur-sm border border-muted focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-300"
         />
