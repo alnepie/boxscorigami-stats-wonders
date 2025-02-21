@@ -13,19 +13,35 @@ serve(async (req) => {
   }
 
   try {
+    console.log('Received request');
+    const { csvData } = await req.json();
+    console.log('CSV data length:', csvData?.length);
+    
+    if (!csvData || !Array.isArray(csvData)) {
+      throw new Error('Invalid CSV data format');
+    }
+
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    const { csvData } = await req.json();
-    
     // Process in smaller batches to prevent timeouts
     const BATCH_SIZE = 25;
+    let totalProcessed = 0;
+    
     for (let i = 0; i < csvData.length; i += BATCH_SIZE) {
       const batch = csvData.slice(i, i + BATCH_SIZE);
+      console.log(`Processing batch ${i/BATCH_SIZE + 1}, size: ${batch.length}`);
+      
       const records = batch
-        .filter(row => row.firstName && row.lastName && row.gameDate && row.playerteamName && row.opponentteamName)
+        .filter(row => {
+          const isValid = row.firstName && row.lastName && row.gameDate && row.playerteamName && row.opponentteamName;
+          if (!isValid) {
+            console.log('Invalid row:', row);
+          }
+          return isValid;
+        })
         .map(row => ({
           player_name: `${row.firstName?.trim()} ${row.lastName?.trim()}`,
           game_date: row.gameDate?.trim(),
@@ -46,8 +62,12 @@ serve(async (req) => {
           minutes_played: row.numMinutes?.toString() || null
         }));
 
-      if (records.length === 0) continue;
+      if (records.length === 0) {
+        console.log('No valid records in batch');
+        continue;
+      }
 
+      console.log(`Inserting ${records.length} records`);
       const { error } = await supabaseClient
         .from('box_scores')
         .upsert(records, {
@@ -58,10 +78,15 @@ serve(async (req) => {
         console.error('Error inserting batch:', error);
         throw error;
       }
+
+      totalProcessed += records.length;
+      console.log(`Successfully processed ${totalProcessed} records so far`);
     }
 
     return new Response(
-      JSON.stringify({ message: 'Data imported successfully' }),
+      JSON.stringify({ 
+        message: `Data imported successfully. Processed ${totalProcessed} records.` 
+      }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 200 
@@ -72,7 +97,7 @@ serve(async (req) => {
     console.error('Error:', error);
     return new Response(
       JSON.stringify({ 
-        error: 'Failed to import data. Please ensure your CSV file contains all required fields.' 
+        error: `Import failed: ${error.message}. Please ensure your CSV file contains all required fields.` 
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
