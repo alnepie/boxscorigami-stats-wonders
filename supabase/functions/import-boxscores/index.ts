@@ -25,25 +25,25 @@ serve(async (req) => {
     for (let i = 0; i < csvData.length; i += BATCH_SIZE) {
       const batch = csvData.slice(i, i + BATCH_SIZE);
       const records = batch
-        .filter(row => row.Player && row.Date && row.Team && row.Opponent) // Filter out invalid rows
+        .filter(row => row.firstName && row.lastName && row.gameDate && row.playerteamName && row.opponentteamName)
         .map(row => ({
-          player_name: row.Player?.trim(),
-          game_date: row.Date?.trim(),
-          team: row.Team?.trim(),
-          opponent: row.Opponent?.trim(),
-          points: parseInt(row.PTS) || 0,
-          rebounds: parseInt(row.TRB) || 0,
-          assists: parseInt(row.AST) || 0,
-          steals: parseInt(row.STL) || 0,
-          blocks: parseInt(row.BLK) || 0,
-          turnovers: parseInt(row.TOV) || 0,
-          field_goals_made: parseInt(row.FG) || 0,
-          field_goals_attempted: parseInt(row.FGA) || 0,
-          three_pointers_made: parseInt(row['3P']) || 0,
-          three_pointers_attempted: parseInt(row['3PA']) || 0,
-          free_throws_made: parseInt(row.FT) || 0,
-          free_throws_attempted: parseInt(row.FTA) || 0,
-          minutes_played: row.MP?.trim() || null
+          player_name: `${row.firstName?.trim()} ${row.lastName?.trim()}`,
+          game_date: row.gameDate?.trim(),
+          team: `${row.playerteamCity?.trim()} ${row.playerteamName?.trim()}`,
+          opponent: `${row.opponentteamCity?.trim()} ${row.opponentteamName?.trim()}`,
+          points: parseInt(row.points) || 0,
+          rebounds: parseInt(row.reboundsTotal) || 0,
+          assists: parseInt(row.assists) || 0,
+          steals: parseInt(row.steals) || 0,
+          blocks: parseInt(row.blocks) || 0,
+          turnovers: parseInt(row.turnovers) || 0,
+          field_goals_made: parseInt(row.fieldGoalsMade) || 0,
+          field_goals_attempted: parseInt(row.fieldGoalsAttempted) || 0,
+          three_pointers_made: parseInt(row.threePointersMade) || 0,
+          three_pointers_attempted: parseInt(row.threePointersAttempted) || 0,
+          free_throws_made: parseInt(row.freeThrowsMade) || 0,
+          free_throws_attempted: parseInt(row.freeThrowsAttempted) || 0,
+          minutes_played: row.numMinutes?.toString() || null
         }));
 
       if (records.length === 0) continue;
@@ -72,7 +72,7 @@ serve(async (req) => {
     console.error('Error:', error);
     return new Response(
       JSON.stringify({ 
-        error: 'Failed to import data. Please ensure your CSV file contains valid data with required fields (Player, Date, Team, Opponent).' 
+        error: 'Failed to import data. Please ensure your CSV file contains all required fields.' 
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
