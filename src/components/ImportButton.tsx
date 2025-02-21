@@ -15,6 +15,15 @@ export const ImportButton = () => {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    if (!file.name.toLowerCase().endsWith('.csv')) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Please select a valid CSV file.",
+      });
+      return;
+    }
+
     setIsLoading(true);
     setProgress(0);
     
@@ -27,16 +36,18 @@ export const ImportButton = () => {
         title: "Success",
         description: "Box scores imported successfully",
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Import error:', error);
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to import box scores. Please try again.",
+        description: error?.message || "Failed to import box scores. Please ensure your CSV file contains all required fields (Player, Date, Team, Opponent).",
       });
     } finally {
       setIsLoading(false);
       setProgress(0);
+      // Reset the input
+      event.target.value = '';
     }
   };
 

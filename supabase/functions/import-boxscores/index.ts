@@ -24,25 +24,29 @@ serve(async (req) => {
     const BATCH_SIZE = 25;
     for (let i = 0; i < csvData.length; i += BATCH_SIZE) {
       const batch = csvData.slice(i, i + BATCH_SIZE);
-      const records = batch.map(row => ({
-        player_name: row.Player,
-        game_date: row.Date,
-        team: row.Team,
-        opponent: row.Opponent,
-        points: parseInt(row.PTS),
-        rebounds: parseInt(row.TRB),
-        assists: parseInt(row.AST),
-        steals: parseInt(row.STL),
-        blocks: parseInt(row.BLK),
-        turnovers: parseInt(row.TOV),
-        field_goals_made: parseInt(row.FG),
-        field_goals_attempted: parseInt(row.FGA),
-        three_pointers_made: parseInt(row['3P']),
-        three_pointers_attempted: parseInt(row['3PA']),
-        free_throws_made: parseInt(row.FT),
-        free_throws_attempted: parseInt(row.FTA),
-        minutes_played: row.MP
-      }));
+      const records = batch
+        .filter(row => row.Player && row.Date && row.Team && row.Opponent) // Filter out invalid rows
+        .map(row => ({
+          player_name: row.Player?.trim(),
+          game_date: row.Date?.trim(),
+          team: row.Team?.trim(),
+          opponent: row.Opponent?.trim(),
+          points: parseInt(row.PTS) || 0,
+          rebounds: parseInt(row.TRB) || 0,
+          assists: parseInt(row.AST) || 0,
+          steals: parseInt(row.STL) || 0,
+          blocks: parseInt(row.BLK) || 0,
+          turnovers: parseInt(row.TOV) || 0,
+          field_goals_made: parseInt(row.FG) || 0,
+          field_goals_attempted: parseInt(row.FGA) || 0,
+          three_pointers_made: parseInt(row['3P']) || 0,
+          three_pointers_attempted: parseInt(row['3PA']) || 0,
+          free_throws_made: parseInt(row.FT) || 0,
+          free_throws_attempted: parseInt(row.FTA) || 0,
+          minutes_played: row.MP?.trim() || null
+        }));
+
+      if (records.length === 0) continue;
 
       const { error } = await supabaseClient
         .from('box_scores')
@@ -67,10 +71,12 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error:', error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: 'Failed to import data. Please ensure your CSV file contains valid data with required fields (Player, Date, Team, Opponent).' 
+      }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500 
+        status: 400
       }
     );
   }
