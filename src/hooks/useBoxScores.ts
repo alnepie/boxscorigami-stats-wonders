@@ -22,14 +22,14 @@ export const useHighestScoringGame = () => {
         .select("id, player_name, game_date, team, opponent, points, rebounds, assists")
         .order("points", { ascending: false })
         .limit(1)
-        .single();
+        .maybeSingle();
 
       if (error) {
         console.error("Error fetching highest scoring game:", error);
         throw error;
       }
 
-      return data as BoxScore;
+      return data as BoxScore | null;
     },
   });
 };
