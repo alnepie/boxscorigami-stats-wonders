@@ -4,12 +4,13 @@ import { StatCard } from "@/components/StatCard";
 import { ImportButton } from "@/components/ImportButton";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { useBoxScores } from "@/hooks/useBoxScores";
+import { useBoxScores, useHighestScoringGame } from "@/hooks/useBoxScores";
 import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { data: boxScores, isLoading, error } = useBoxScores(searchQuery);
+  const { data: highestScoringGame, isLoading: isLoadingHighScore } = useHighestScoringGame();
   const { toast } = useToast();
 
   if (error) {
@@ -42,6 +43,15 @@ const Index = () => {
             <ImportButton />
           </div>
         </motion.div>
+
+        {!isLoadingHighScore && highestScoringGame && (
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-center">Highest Scoring Game</h2>
+            <div className="max-w-md mx-auto">
+              <StatCard {...highestScoringGame} />
+            </div>
+          </div>
+        )}
 
         <Search value={searchQuery} onChange={setSearchQuery} />
 

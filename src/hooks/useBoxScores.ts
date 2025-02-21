@@ -13,6 +13,27 @@ export interface BoxScore {
   assists: number;
 }
 
+export const useHighestScoringGame = () => {
+  return useQuery({
+    queryKey: ["highest-scoring-game"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("box_scores")
+        .select("id, player_name, game_date, team, opponent, points, rebounds, assists")
+        .order("points", { ascending: false })
+        .limit(1)
+        .single();
+
+      if (error) {
+        console.error("Error fetching highest scoring game:", error);
+        throw error;
+      }
+
+      return data as BoxScore;
+    },
+  });
+};
+
 export const useBoxScores = (searchQuery: string = "") => {
   return useQuery({
     queryKey: ["box-scores", searchQuery],
