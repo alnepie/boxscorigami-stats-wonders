@@ -11,7 +11,7 @@ export const importBoxScores = async (file: File, onProgress?: (progress: number
       try {
         const csvText = event.target?.result as string;
         const lines = csvText.split('\n');
-        const headers = lines[0].split('\t'); // Changed to tab delimiter
+        const headers = lines[0].split(','); // Changed from tab to comma delimiter
         const totalRows = lines.length - 1;
         
         console.log('Headers:', headers);
@@ -22,7 +22,7 @@ export const importBoxScores = async (file: File, onProgress?: (progress: number
           const csvData = chunkLines
             .filter(line => line.trim()) // Skip empty lines
             .map(line => {
-              const values = line.split('\t'); // Changed to tab delimiter
+              const values = line.split(','); // Changed from tab to comma delimiter
               return headers.reduce((obj, header, index) => {
                 obj[header.trim()] = values[index]?.trim();
                 return obj;
