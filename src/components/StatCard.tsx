@@ -10,10 +10,37 @@ interface StatCardProps {
   points: number;
   rebounds: number;
   assists: number;
+  steals?: number;
+  blocks?: number;
+  turnovers?: number;
+  field_goals_made?: number;
+  field_goals_attempted?: number;
+  three_pointers_made?: number;
+  three_pointers_attempted?: number;
+  free_throws_made?: number;
+  free_throws_attempted?: number;
 }
 
-export const StatCard = ({ player_name, game_date, team, opponent, points, rebounds, assists }: StatCardProps) => {
+export const StatCard = ({ 
+  player_name, 
+  game_date, 
+  team, 
+  opponent, 
+  points, 
+  rebounds, 
+  assists,
+  steals,
+  blocks,
+  turnovers,
+  field_goals_made,
+  field_goals_attempted,
+  three_pointers_made,
+  three_pointers_attempted,
+  free_throws_made,
+  free_throws_attempted
+}: StatCardProps) => {
   const formattedDate = format(new Date(game_date), "MMMM d, yyyy");
+  const showDetailedStats = steals !== undefined;
   
   return (
     <motion.div
@@ -44,6 +71,36 @@ export const StatCard = ({ player_name, game_date, team, opponent, points, rebou
             <p className="text-sm text-muted-foreground">AST</p>
           </div>
         </div>
+        
+        {showDetailedStats && (
+          <div className="pt-4 border-t border-border">
+            <div className="grid grid-cols-3 gap-4">
+              <div className="text-center">
+                <p className="text-lg font-semibold text-primary">{steals}</p>
+                <p className="text-xs text-muted-foreground">STL</p>
+              </div>
+              <div className="text-center">
+                <p className="text-lg font-semibold text-primary">{blocks}</p>
+                <p className="text-xs text-muted-foreground">BLK</p>
+              </div>
+              <div className="text-center">
+                <p className="text-lg font-semibold text-primary">{turnovers}</p>
+                <p className="text-xs text-muted-foreground">TO</p>
+              </div>
+            </div>
+            <div className="mt-4 space-y-2 text-sm text-muted-foreground">
+              <p className="text-center">
+                FG: {field_goals_made}/{field_goals_attempted}
+              </p>
+              <p className="text-center">
+                3P: {three_pointers_made}/{three_pointers_attempted}
+              </p>
+              <p className="text-center">
+                FT: {free_throws_made}/{free_throws_attempted}
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </motion.div>
   );

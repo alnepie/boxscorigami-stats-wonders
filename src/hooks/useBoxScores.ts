@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -10,6 +11,15 @@ export interface BoxScore {
   points: number;
   rebounds: number;
   assists: number;
+  steals: number;
+  blocks: number;
+  turnovers: number;
+  field_goals_made: number;
+  field_goals_attempted: number;
+  three_pointers_made: number;
+  three_pointers_attempted: number;
+  free_throws_made: number;
+  free_throws_attempted: number;
 }
 
 export const useHighestScoringGame = () => {
@@ -84,9 +94,9 @@ export const useBoxScores = (searchQuery: string = "") => {
     queryFn: async () => {
       let query = supabase
         .from("box_scores")
-        .select("id, player_name, game_date, team, opponent, points, rebounds, assists")
-        .order("game_date", { ascending: false })
-        .limit(50);
+        .select("*")
+        .eq("is_unique", true)
+        .order("game_date", { ascending: false });
 
       if (searchQuery) {
         query = query.ilike("player_name", `%${searchQuery}%`);
