@@ -4,13 +4,15 @@ import { StatCard } from "@/components/StatCard";
 import { ImportButton } from "@/components/ImportButton";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { useBoxScores, useHighestScoringGame } from "@/hooks/useBoxScores";
+import { useBoxScores, useHighestScoringGame, useHighestAssistsGame, useHighestReboundsGame } from "@/hooks/useBoxScores";
 import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { data: boxScores, isLoading, error } = useBoxScores(searchQuery);
   const { data: highestScoringGame, isLoading: isLoadingHighScore } = useHighestScoringGame();
+  const { data: highestAssistsGame, isLoading: isLoadingAssists } = useHighestAssistsGame();
+  const { data: highestReboundsGame, isLoading: isLoadingRebounds } = useHighestReboundsGame();
   const { toast } = useToast();
 
   if (error) {
@@ -44,19 +46,43 @@ const Index = () => {
           </div>
         </motion.div>
 
-        {!isLoadingHighScore && highestScoringGame && (
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="space-y-4"
-          >
-            <h2 className="text-2xl font-bold text-center">Highest Scoring Game</h2>
-            <div className="max-w-md mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {!isLoadingHighScore && highestScoringGame && (
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="space-y-4"
+            >
+              <h2 className="text-2xl font-bold text-center">Highest Scoring Game</h2>
               <StatCard {...highestScoringGame} />
-            </div>
-          </motion.div>
-        )}
+            </motion.div>
+          )}
+
+          {!isLoadingAssists && highestAssistsGame && (
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="space-y-4"
+            >
+              <h2 className="text-2xl font-bold text-center">Most Assists (2024/25)</h2>
+              <StatCard {...highestAssistsGame} />
+            </motion.div>
+          )}
+
+          {!isLoadingRebounds && highestReboundsGame && (
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="space-y-4"
+            >
+              <h2 className="text-2xl font-bold text-center">Most Rebounds (2024/25)</h2>
+              <StatCard {...highestReboundsGame} />
+            </motion.div>
+          )}
+        </div>
 
         <Search value={searchQuery} onChange={setSearchQuery} />
 

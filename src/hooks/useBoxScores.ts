@@ -34,6 +34,52 @@ export const useHighestScoringGame = () => {
   });
 };
 
+export const useHighestAssistsGame = () => {
+  return useQuery({
+    queryKey: ["highest-assists-game"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("box_scores")
+        .select("id, player_name, game_date, team, opponent, points, rebounds, assists")
+        .gte('game_date', '2024-10-01')
+        .lte('game_date', '2025-06-30')
+        .order("assists", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Error fetching highest assists game:", error);
+        throw error;
+      }
+
+      return data as BoxScore | null;
+    },
+  });
+};
+
+export const useHighestReboundsGame = () => {
+  return useQuery({
+    queryKey: ["highest-rebounds-game"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("box_scores")
+        .select("id, player_name, game_date, team, opponent, points, rebounds, assists")
+        .gte('game_date', '2024-10-01')
+        .lte('game_date', '2025-06-30')
+        .order("rebounds", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Error fetching highest rebounds game:", error);
+        throw error;
+      }
+
+      return data as BoxScore | null;
+    },
+  });
+};
+
 export const useBoxScores = (searchQuery: string = "") => {
   return useQuery({
     queryKey: ["box-scores", searchQuery],
