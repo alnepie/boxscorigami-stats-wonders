@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -21,15 +20,14 @@ export const useHighestScoringGame = () => {
         .from("box_scores")
         .select("id, player_name, game_date, team, opponent, points, rebounds, assists")
         .order("points", { ascending: false })
-        .limit(1)
-        .maybeSingle();
+        .limit(5);
 
       if (error) {
         console.error("Error fetching highest scoring game:", error);
         throw error;
       }
 
-      return data as BoxScore | null;
+      return data as BoxScore[];
     },
   });
 };

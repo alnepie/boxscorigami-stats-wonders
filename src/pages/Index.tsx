@@ -10,7 +10,7 @@ import { useToast } from "@/components/ui/use-toast";
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { data: boxScores, isLoading, error } = useBoxScores(searchQuery);
-  const { data: highestScoringGame, isLoading: isLoadingHighScore } = useHighestScoringGame();
+  const { data: highestScoringGames, isLoading: isLoadingHighScore } = useHighestScoringGame();
   const { data: highestAssistsGame, isLoading: isLoadingAssists } = useHighestAssistsGame();
   const { data: highestReboundsGame, isLoading: isLoadingRebounds } = useHighestReboundsGame();
   const { toast } = useToast();
@@ -46,42 +46,57 @@ const Index = () => {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {!isLoadingHighScore && highestScoringGame && (
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="space-y-4"
-            >
-              <h2 className="text-2xl font-bold text-center">Highest Scoring Game</h2>
-              <StatCard {...highestScoringGame} />
-            </motion.div>
-          )}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-1">
+            {!isLoadingHighScore && highestScoringGames && (
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="space-y-4"
+              >
+                <h2 className="text-2xl font-bold text-center">Top 5 Highest Scoring Games</h2>
+                <div className="space-y-4">
+                  {highestScoringGames.map((game, index) => (
+                    <motion.div
+                      key={game.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.2 + (index * 0.1) }}
+                    >
+                      <StatCard {...game} />
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </div>
 
-          {!isLoadingAssists && highestAssistsGame && (
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="space-y-4"
-            >
-              <h2 className="text-2xl font-bold text-center">Most Assists (2024/25)</h2>
-              <StatCard {...highestAssistsGame} />
-            </motion.div>
-          )}
+          <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">
+            {!isLoadingAssists && highestAssistsGame && (
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="space-y-4"
+              >
+                <h2 className="text-2xl font-bold text-center">Most Assists (2024/25)</h2>
+                <StatCard {...highestAssistsGame} />
+              </motion.div>
+            )}
 
-          {!isLoadingRebounds && highestReboundsGame && (
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              className="space-y-4"
-            >
-              <h2 className="text-2xl font-bold text-center">Most Rebounds (2024/25)</h2>
-              <StatCard {...highestReboundsGame} />
-            </motion.div>
-          )}
+            {!isLoadingRebounds && highestReboundsGame && (
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="space-y-4"
+              >
+                <h2 className="text-2xl font-bold text-center">Most Rebounds (2024/25)</h2>
+                <StatCard {...highestReboundsGame} />
+              </motion.div>
+            )}
+          </div>
         </div>
 
         <Search value={searchQuery} onChange={setSearchQuery} />
