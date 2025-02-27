@@ -4,7 +4,7 @@ import { StatCard } from "@/components/StatCard";
 import { ImportButton } from "@/components/ImportButton";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { useBoxScores, useHighestScoringGame, useHighestAssistsGame, useHighestReboundsGame } from "@/hooks/useBoxScores";
+import { useBoxScores, useHighestScoringGame, useHighestAssistsGame, useHighestReboundsGame, useRecentUniqueGames } from "@/hooks/useBoxScores";
 import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
@@ -13,6 +13,7 @@ const Index = () => {
   const { data: highestScoringGames, isLoading: isLoadingHighScore } = useHighestScoringGame();
   const { data: highestAssistsGame, isLoading: isLoadingAssists } = useHighestAssistsGame();
   const { data: highestReboundsGame, isLoading: isLoadingRebounds } = useHighestReboundsGame();
+  const { data: recentUniqueGames, isLoading: isLoadingRecentUnique } = useRecentUniqueGames();
   const { toast } = useToast();
 
   if (error) {
@@ -98,6 +99,31 @@ const Index = () => {
             )}
           </div>
         </div>
+
+        {/* Recent Unique Statlines Section */}
+        {!isLoadingRecentUnique && recentUniqueGames && recentUniqueGames.length > 0 && (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="space-y-6"
+          >
+            <h2 className="text-2xl font-bold text-center">Recent Unique Statlines</h2>
+            <p className="text-center text-muted-foreground">These stat combinations have only occurred once in NBA history</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {recentUniqueGames.map((game, index) => (
+                <motion.div
+                  key={game.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.5 + (index * 0.1) }}
+                >
+                  <StatCard {...game} />
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
 
         <Search value={searchQuery} onChange={setSearchQuery} />
 

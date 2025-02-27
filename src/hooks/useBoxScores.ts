@@ -88,6 +88,27 @@ export const useHighestReboundsGame = () => {
   });
 };
 
+export const useRecentUniqueGames = () => {
+  return useQuery({
+    queryKey: ["recent-unique-games"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("box_scores")
+        .select("*")
+        .eq("is_unique", true)
+        .order("game_date", { ascending: false })
+        .limit(3);
+
+      if (error) {
+        console.error("Error fetching recent unique games:", error);
+        throw error;
+      }
+
+      return data as BoxScore[];
+    },
+  });
+};
+
 export const useBoxScores = (searchQuery: string = "") => {
   return useQuery({
     queryKey: ["box-scores", searchQuery],
