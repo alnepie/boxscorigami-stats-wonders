@@ -16,46 +16,29 @@ const Index = () => {
   const { data: recentUniqueGames, isLoading: isLoadingRecentUnique } = useRecentUniqueGames();
   const { toast } = useToast();
 
+  // Most recent unique statline
+  const mostRecentUniqueStatline = {
+    id: "most-recent",
+    player_name: "Giannis Antetokounmpo",
+    game_date: "2024-01-06",
+    team: "Milwaukee Bucks",
+    opponent: "Toronto Raptors",
+    points: 11,
+    rebounds: 12,
+    assists: 13,
+    steals: 5,
+    blocks: 0,
+    turnovers: 5,
+    field_goals_made: 5,
+    field_goals_attempted: 11,
+    three_pointers_made: 1,
+    three_pointers_attempted: 2,
+    free_throws_made: 0,
+    free_throws_attempted: 0
+  };
+
   // Famous unique statlines that have only happened once in NBA history
   const famousUniqueStatlines = [
-    {
-      id: "famous5",
-      player_name: "Giannis Antetokounmpo",
-      game_date: "2024-01-06",
-      team: "Milwaukee Bucks",
-      opponent: "Toronto Raptors",
-      points: 11,
-      rebounds: 12,
-      assists: 13,
-      steals: 5,
-      blocks: 0,
-      turnovers: 5,
-      field_goals_made: 5,
-      field_goals_attempted: 11,
-      three_pointers_made: 1,
-      three_pointers_attempted: 2,
-      free_throws_made: 0,
-      free_throws_attempted: 0
-    },
-    {
-      id: "famous4",
-      player_name: "Giannis Antetokounmpo",
-      game_date: "2023-12-13",
-      team: "Milwaukee Bucks",
-      opponent: "Indiana Pacers",
-      points: 64,
-      rebounds: 14,
-      assists: 3,
-      steals: 1,
-      blocks: 4,
-      turnovers: 3,
-      field_goals_made: 20,
-      field_goals_attempted: 28,
-      three_pointers_made: 2,
-      three_pointers_attempted: 4,
-      free_throws_made: 22,
-      free_throws_attempted: 32
-    },
     {
       id: "famous1",
       player_name: "Draymond Green",
@@ -93,25 +76,6 @@ const Index = () => {
       three_pointers_attempted: 9,
       free_throws_made: 2,
       free_throws_attempted: 2
-    },
-    {
-      id: "famous3",
-      player_name: "Luka Dončić",
-      game_date: "2022-12-27",
-      team: "Dallas Mavericks",
-      opponent: "New York Knicks",
-      points: 60,
-      rebounds: 21,
-      assists: 10,
-      steals: 2,
-      blocks: 1,
-      turnovers: 3,
-      field_goals_made: 21,
-      field_goals_attempted: 31,
-      three_pointers_made: 2,
-      three_pointers_attempted: 6,
-      free_throws_made: 16,
-      free_throws_attempted: 22
     }
   ];
 
@@ -146,6 +110,20 @@ const Index = () => {
           </div>
         </motion.div>
 
+        {/* Most Recent Unique Statline Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="space-y-6"
+        >
+          <h2 className="text-2xl font-bold text-center">Most Recent Unique Statline</h2>
+          <p className="text-center text-muted-foreground">The newest addition to the exclusive club of unique NBA stat combinations</p>
+          <div className="max-w-md mx-auto">
+            <StatCard {...mostRecentUniqueStatline} />
+          </div>
+        </motion.div>
+
         {/* Famous Unique Statlines Section */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -155,7 +133,7 @@ const Index = () => {
         >
           <h2 className="text-2xl font-bold text-center">Famous Unique Statlines</h2>
           <p className="text-center text-muted-foreground">These extraordinary stat combinations have only occurred once in NBA history</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {famousUniqueStatlines.map((game, index) => (
               <motion.div
                 key={game.id}
