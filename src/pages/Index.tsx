@@ -19,6 +19,25 @@ const Index = () => {
   // Famous unique statlines that have only happened once in NBA history
   const famousUniqueStatlines = [
     {
+      id: "famous5",
+      player_name: "Giannis Antetokounmpo",
+      game_date: "2024-01-06",
+      team: "Milwaukee Bucks",
+      opponent: "Toronto Raptors",
+      points: 11,
+      rebounds: 12,
+      assists: 13,
+      steals: 5,
+      blocks: 0,
+      turnovers: 5,
+      field_goals_made: 5,
+      field_goals_attempted: 11,
+      three_pointers_made: 1,
+      three_pointers_attempted: 2,
+      free_throws_made: 0,
+      free_throws_attempted: 0
+    },
+    {
       id: "famous4",
       player_name: "Giannis Antetokounmpo",
       game_date: "2023-12-13",
@@ -136,7 +155,7 @@ const Index = () => {
         >
           <h2 className="text-2xl font-bold text-center">Famous Unique Statlines</h2>
           <p className="text-center text-muted-foreground">These extraordinary stat combinations have only occurred once in NBA history</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
             {famousUniqueStatlines.map((game, index) => (
               <motion.div
                 key={game.id}
