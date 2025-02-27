@@ -16,6 +16,67 @@ const Index = () => {
   const { data: recentUniqueGames, isLoading: isLoadingRecentUnique } = useRecentUniqueGames();
   const { toast } = useToast();
 
+  // Famous unique statlines that have only happened once in NBA history
+  const famousUniqueStatlines = [
+    {
+      id: "famous1",
+      player_name: "Draymond Green",
+      game_date: "2017-02-10",
+      team: "Golden State Warriors",
+      opponent: "Memphis Grizzlies",
+      points: 4,
+      rebounds: 12,
+      assists: 10,
+      steals: 5,
+      blocks: 1,
+      turnovers: 2,
+      field_goals_made: 1,
+      field_goals_attempted: 4,
+      three_pointers_made: 0,
+      three_pointers_attempted: 1,
+      free_throws_made: 2,
+      free_throws_attempted: 2
+    },
+    {
+      id: "famous2",
+      player_name: "Russell Westbrook",
+      game_date: "2019-04-02",
+      team: "Oklahoma City Thunder",
+      opponent: "Los Angeles Lakers",
+      points: 20,
+      rebounds: 20,
+      assists: 21,
+      steals: 2,
+      blocks: 0,
+      turnovers: 3,
+      field_goals_made: 8,
+      field_goals_attempted: 23,
+      three_pointers_made: 2,
+      three_pointers_attempted: 9,
+      free_throws_made: 2,
+      free_throws_attempted: 2
+    },
+    {
+      id: "famous3",
+      player_name: "Luka Dončić",
+      game_date: "2022-12-27",
+      team: "Dallas Mavericks",
+      opponent: "New York Knicks",
+      points: 60,
+      rebounds: 21,
+      assists: 10,
+      steals: 2,
+      blocks: 1,
+      turnovers: 3,
+      field_goals_made: 21,
+      field_goals_attempted: 31,
+      three_pointers_made: 2,
+      three_pointers_attempted: 6,
+      free_throws_made: 16,
+      free_throws_attempted: 22
+    }
+  ];
+
   if (error) {
     toast({
       variant: "destructive",
@@ -44,6 +105,29 @@ const Index = () => {
           </p>
           <div className="flex justify-center">
             <ImportButton />
+          </div>
+        </motion.div>
+
+        {/* Famous Unique Statlines Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="space-y-6"
+        >
+          <h2 className="text-2xl font-bold text-center">Famous Unique Statlines</h2>
+          <p className="text-center text-muted-foreground">These extraordinary stat combinations have only occurred once in NBA history</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {famousUniqueStatlines.map((game, index) => (
+              <motion.div
+                key={game.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 + (index * 0.1) }}
+              >
+                <StatCard {...game} />
+              </motion.div>
+            ))}
           </div>
         </motion.div>
 
