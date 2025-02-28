@@ -99,11 +99,8 @@ const Index = () => {
           transition={{ duration: 0.5 }}
           className="text-center space-y-6"
         >
-          <span className="px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium">
-            NBA Statistics Reimagined
-          </span>
           <h1 className="text-4xl md:text-6xl font-bold text-foreground">
-            Box Score<span className="text-primary">gami</span>
+            <span className="text-secondary">Box</span><span className="text-primary">Scorigami</span>
           </h1>
           <div className="text-lg text-muted-foreground max-w-3xl mx-auto space-y-4">
             <h3 className="font-medium text-xl">What is BoxScorigami?</h3>

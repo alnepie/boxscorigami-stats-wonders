@@ -26,11 +26,11 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#9b87f5",
+          DEFAULT: "#0EA5E9", // Bright blue color from NBA logo
           foreground: "#ffffff",
         },
         secondary: {
-          DEFAULT: "#7E69AB",
+          DEFAULT: "#ea384c", // Red color from NBA logo
           foreground: "#ffffff",
         },
         destructive: {
@@ -38,11 +38,11 @@ export default {
           foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
-          DEFAULT: "#E5DEFF",
+          DEFAULT: "#e0f2fe", // Light blue background
           foreground: "#1A1F2C",
         },
         accent: {
-          DEFAULT: "#D6BCFA",
+          DEFAULT: "#fee2e2", // Light red accent
           foreground: "#1A1F2C",
         },
         card: {
