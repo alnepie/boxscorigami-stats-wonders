@@ -129,12 +129,32 @@ export const useBoxScores = (searchQuery: string = "") => {
           return [];
         }
 
-        // Sanitize the data to ensure valid dates
-        const sanitizedData = (data || []).map(record => ({
-          ...record,
-          // Ensure game_date is a valid date string or null
-          game_date: record.game_date ? new Date(record.game_date).toISOString() : null
-        }));
+        console.log('Raw data from Supabase:', data);
+
+        const sanitizedData = (data || []).map(record => {
+          try {
+            const dateValue = record.game_date;
+            let validDate = null;
+            
+            if (dateValue) {
+              const parsedDate = new Date(dateValue);
+              if (!isNaN(parsedDate.getTime())) {
+                validDate = parsedDate.toISOString().split('T')[0];
+              }
+            }
+
+            return {
+              ...record,
+              game_date: validDate
+            };
+          } catch (err) {
+            console.error("Error processing record:", record);
+            return {
+              ...record,
+              game_date: null
+            };
+          }
+        });
 
         return sanitizedData;
       } catch (err) {
@@ -144,5 +164,6 @@ export const useBoxScores = (searchQuery: string = "") => {
     },
     retry: 3,
     initialData: [],
+    staleTime: 1000 * 60 * 5,
   });
 };
