@@ -87,6 +87,9 @@ const Index = () => {
     });
   }
 
+  // Check if the user is an admin (you can implement proper auth later)
+  const isAdmin = false; // Set to false to hide the import button
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted">
       <div className="container mx-auto px-4 py-16 space-y-16">
@@ -102,12 +105,17 @@ const Index = () => {
           <h1 className="text-4xl md:text-6xl font-bold text-foreground">
             Box Score<span className="text-primary">gami</span>
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover unique NBA stat lines that have only happened once in league history.
-          </p>
-          <div className="flex justify-center">
-            <ImportButton />
+          <div className="text-lg text-muted-foreground max-w-3xl mx-auto space-y-4">
+            <h3 className="font-medium text-xl">What is BoxScorigami?</h3>
+            <p>
+              You might have seen Scorigami, a concept thought by Jon Bois, which tracks final scores that never happened in NFL history. BoxScorigami tracks unique statlines (Points, Rebounds and Assists) in the NBA. If we were to apply Pareto principle ideas to this, the list would be dominated by Wilt Chamberlain who had monster statlines (53 points, 32 rebounds, 14 assists!). Instead it's fascinating to see different players here such as Draymond who makes my personal list.
+            </p>
           </div>
+          {isAdmin && (
+            <div className="flex justify-center">
+              <ImportButton />
+            </div>
+          )}
         </motion.div>
 
         {/* Most Recent Unique Statline Section */}
