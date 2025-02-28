@@ -94,8 +94,15 @@ export const useRecentUniqueGames = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("box_scores")
+<<<<<<< HEAD
         .select("*")
         .eq("is_unique", true)
+=======
+        .select("*") as any;
+      
+      query = query
+        .eq("first_time_combination", true)
+>>>>>>> 30c0b94 (feat: add Pareto visualization and reorganize layout)
         .order("game_date", { ascending: false })
         .limit(3);
 

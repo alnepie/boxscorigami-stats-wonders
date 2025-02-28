@@ -2,10 +2,15 @@
 import { Search } from "@/components/Search";
 import { StatCard } from "@/components/StatCard";
 import { ImportButton } from "@/components/ImportButton";
+<<<<<<< HEAD
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useBoxScores, useHighestScoringGame, useHighestAssistsGame, useHighestReboundsGame, useRecentUniqueGames } from "@/hooks/useBoxScores";
 import { useToast } from "@/components/ui/use-toast";
+=======
+import { StatCard } from "@/components/StatCard";
+import { motion } from "framer-motion";
+>>>>>>> 30c0b94 (feat: add Pareto visualization and reorganize layout)
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -105,7 +110,11 @@ const Index = () => {
           <div className="text-lg text-muted-foreground max-w-3xl mx-auto space-y-4">
             <h3 className="font-medium text-xl">What is BoxScorigami?</h3>
             <p>
+<<<<<<< HEAD
               You might have seen Scorigami, a concept thought by Jon Bois, which tracks final scores that never happened in NFL history. BoxScorigami tracks unique statlines (Points, Rebounds and Assists) in the NBA. If we were to apply Pareto principle ideas to this, the list would be dominated by Wilt Chamberlain who had monster statlines (53 points, 32 rebounds, 14 assists!). Instead it's fascinating to see different players here such as Draymond who makes my personal list.
+=======
+              You might have seen Scorigami, a concept thought by Jon Bois, which tracks final scores that never happened in NFL history. BoxScorigami tracks unique statlines (Points, Rebounds and Assists) in the NBA.
+>>>>>>> 30c0b94 (feat: add Pareto visualization and reorganize layout)
             </p>
           </div>
           {isAdmin && (
@@ -124,6 +133,7 @@ const Index = () => {
         >
           <h2 className="text-2xl font-bold text-center">Most Recent Unique Statline</h2>
           <p className="text-center text-muted-foreground">The newest addition to the exclusive club of unique NBA stat combinations</p>
+<<<<<<< HEAD
           <div className="max-w-md mx-auto">
             <StatCard {...mostRecentUniqueStatline} />
           </div>
@@ -241,6 +251,29 @@ const Index = () => {
             ))}
           </div>
         )}
+=======
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            <div className="max-w-md mx-auto">
+              <StatCard {...mostRecentUniqueStatline} />
+            </div>
+            <div className="max-w-md mx-auto">
+              <img 
+                src="/path-to-your-pareto-image.png" 
+                alt="3D Pareto Principle Visualization of Game Stats" 
+                className="w-full h-auto rounded-lg shadow-lg"
+              />
+            </div>
+          </div>
+          <p className="text-center text-muted-foreground max-w-3xl mx-auto mt-6">
+            Let's talk about the Pareto Principle/Frontier. If you have a semblance of ball knowledge, it's easy to guess Wilt Chamberlain eats everyone else - he is the defintion of Pareto Optimal. There are no tradeoffs in his stats.  
+            Wilt had 53 points, 32 rebounds, 14 assists in a game. However this doesn't make "less optimal" unique statlines any less special. Draymond recorded the first triple double in history wihtout points. When Westbrook put up 20,20,20, he was the 2nd player to do so, 
+            the first being Wilt to no surprise. 
+            
+          </p>
+        </motion.div>
+
+        {/* Rest of the components stay the same ... */}
+>>>>>>> 30c0b94 (feat: add Pareto visualization and reorganize layout)
       </div>
     </div>
   );
