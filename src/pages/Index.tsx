@@ -61,21 +61,21 @@ const Index = () => {
     {
       id: "famous2",
       player_name: "Russell Westbrook",
-      game_date: "2017-04-09",
+      game_date: "2019-04-02",
       team: "Oklahoma City Thunder",
-      opponent: "Denver Nuggets",
-      points: 50,
-      rebounds: 16,
-      assists: 10,
-      steals: 0,
-      blocks: 1,
-      turnovers: 7,
-      field_goals_made: 17,
-      field_goals_attempted: 32,
-      three_pointers_made: 5,
-      three_pointers_attempted: 12,
-      free_throws_made: 11,
-      free_throws_attempted: 15
+      opponent: "Los Angeles Lakers",
+      points: 20,
+      rebounds: 20,
+      assists: 21,
+      steals: 2,
+      blocks: 0,
+      turnovers: 3,
+      field_goals_made: 8,
+      field_goals_attempted: 23,
+      three_pointers_made: 2,
+      three_pointers_attempted: 9,
+      free_throws_made: 2,
+      free_throws_attempted: 2
     }
   ];
 
