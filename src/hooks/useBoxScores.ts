@@ -1,4 +1,3 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -52,19 +51,17 @@ export const useHighestAssistsGame = () => {
         .gte('game_date', '2024-10-01')
         .lte('game_date', '2025-06-30')
         .order("assists", { ascending: false })
-        .limit(1)
-        .maybeSingle();
+        .limit(5);
 
       if (error) {
         console.error("Error fetching highest assists game:", error);
         throw error;
       }
 
-      return data as BoxScore | null;
+      return data as BoxScore[];
     },
   });
 };
-
 export const useHighestReboundsGame = () => {
   return useQuery({
     queryKey: ["highest-rebounds-game"],
@@ -75,15 +72,14 @@ export const useHighestReboundsGame = () => {
         .gte('game_date', '2024-10-01')
         .lte('game_date', '2025-06-30')
         .order("rebounds", { ascending: false })
-        .limit(1)
-        .maybeSingle();
+        .limit(5);
 
       if (error) {
         console.error("Error fetching highest rebounds game:", error);
         throw error;
       }
 
-      return data as BoxScore | null;
+      return data as BoxScore[];
     },
   });
 };
@@ -95,7 +91,7 @@ export const useRecentUniqueGames = () => {
       const { data, error } = await supabase
         .from("box_scores")
         .select("*")
-        .eq("is_unique", true)
+        .eq("first_time_combination", true)
         .order("game_date", { ascending: false })
         .limit(3);
 
@@ -116,7 +112,7 @@ export const useBoxScores = (searchQuery: string = "") => {
       let query = supabase
         .from("box_scores")
         .select("*")
-        .eq("is_unique", true)
+        .eq("first_time_combination", true)
         .order("game_date", { ascending: false });
 
       if (searchQuery) {

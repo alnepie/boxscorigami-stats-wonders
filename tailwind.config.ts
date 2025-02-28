@@ -23,7 +23,7 @@ export default {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
+        background: "hsl(var(--background))", // Background color
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "#0EA5E9", // Bright blue color from NBA logo

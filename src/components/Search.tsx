@@ -2,7 +2,7 @@
 import { Search as SearchIcon } from "lucide-react";
 import { motion } from "framer-motion";
 
-interface SearchProps {
+interface SearchProps { 
   value: string;
   onChange: (value: string) => void;
 }
