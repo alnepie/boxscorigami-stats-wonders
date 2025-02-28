@@ -111,7 +111,9 @@ export const useBoxScores = (searchQuery: string = "") => {
     queryFn: async () => {
       let query = supabase
         .from("box_scores")
-        .select("*")
+        .select("*") as any;
+      
+      query = query
         .eq("first_time_combination", true)
         .order("game_date", { ascending: false });
 

@@ -2,6 +2,8 @@ import { useRecentUniqueGames } from '../hooks/useBoxScores';
 
 export const UniqueStatlines = () => {
   const { data: uniqueGames, isLoading, error } = useRecentUniqueGames();
+  
+  console.log('UniqueStatlines render:', { isLoading, error, dataLength: uniqueGames?.length }) // Debug log
 
   if (isLoading) {
     return (
