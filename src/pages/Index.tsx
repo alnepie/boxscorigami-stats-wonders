@@ -164,7 +164,7 @@ const Index = () => {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="space-y-4"
               >
-                <h2 className="text-2xl font-bold text-center">Top 5 Highest Scoring Games</h2>
+                <h2 className="text-2xl font-bold text-center">Top 5 Highest Scoring Games (2024/2025)</h2>
                 <div className="space-y-4">
                   {highestScoringGames.map((game, index) => (
                     <motion.div
@@ -189,7 +189,7 @@ const Index = () => {
                 transition={{ duration: 0.5, delay: 0.3 }}
                 className="space-y-4"
               >
-                <h2 className="text-2xl font-bold text-center">Most Assists (2024/25)</h2>
+                <h2 className="text-2xl font-bold text-center">Top 5 Most Assists (2024/2025)</h2>
                 <StatCard {...highestAssistsGame} />
               </motion.div>
             )}
@@ -201,7 +201,7 @@ const Index = () => {
                 transition={{ duration: 0.5, delay: 0.4 }}
                 className="space-y-4"
               >
-                <h2 className="text-2xl font-bold text-center">Most Rebounds (2024/25)</h2>
+                <h2 className="text-2xl font-bold text-center">Top 5 Most Rebounds (2024/2025)</h2>
                 <StatCard {...highestReboundsGame} />
               </motion.div>
             )}
