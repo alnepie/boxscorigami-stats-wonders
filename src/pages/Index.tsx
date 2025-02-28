@@ -1,4 +1,3 @@
-
 import { Search } from "@/components/Search";
 import { StatCard } from "@/components/StatCard";
 import { ImportButton } from "@/components/ImportButton";
@@ -124,9 +123,21 @@ const Index = () => {
         >
           <h2 className="text-2xl font-bold text-center">Most Recent Unique Statline</h2>
           <p className="text-center text-muted-foreground">The newest addition to the exclusive club of unique NBA stat combinations</p>
-          <div className="max-w-md mx-auto">
-            <StatCard {...mostRecentUniqueStatline} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            <div className="max-w-md mx-auto">
+              <StatCard {...mostRecentUniqueStatline} />
+            </div>
+            <div className="max-w-md mx-auto">
+              <img 
+                src="/images/output.png" 
+                alt="3D Pareto Principle Visualization of Game Stats" 
+                className="w-full h-auto rounded-lg shadow-lg"
+              />
+            </div>
           </div>
+          <p className="text-center text-muted-foreground max-w-3xl mx-auto mt-6">
+            If we were to apply Pareto principle ideas to this, the list would be dominated by Wilt Chamberlain who had monster statlines (53 points, 32 rebounds, 14 assists!). Instead it's fascinating to see different players here such as Draymond who makes my personal list.
+          </p>
         </motion.div>
 
         {/* Famous Unique Statlines Section */}
