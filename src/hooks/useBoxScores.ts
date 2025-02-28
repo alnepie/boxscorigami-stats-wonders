@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -91,16 +92,12 @@ export const useRecentUniqueGames = () => {
   return useQuery({
     queryKey: ["recent-unique-games"],
     queryFn: async () => {
-      let query = supabase
+      const { data, error } = await supabase
         .from("box_scores")
-        .select("*") as any;
-      
-      query = query
-        .eq("first_time_combination", true)
+        .select("*")
+        .eq("is_unique", true)
         .order("game_date", { ascending: false })
         .limit(3);
-
-      const { data, error } = await query;
 
       if (error) {
         console.error("Error fetching recent unique games:", error);
