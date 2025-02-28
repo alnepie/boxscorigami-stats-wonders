@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -51,17 +52,19 @@ export const useHighestAssistsGame = () => {
         .gte('game_date', '2024-10-01')
         .lte('game_date', '2025-06-30')
         .order("assists", { ascending: false })
-        .limit(5);
+        .limit(1)
+        .maybeSingle();
 
       if (error) {
         console.error("Error fetching highest assists game:", error);
         throw error;
       }
 
-      return data as BoxScore[];
+      return data as BoxScore | null;
     },
   });
 };
+
 export const useHighestReboundsGame = () => {
   return useQuery({
     queryKey: ["highest-rebounds-game"],
@@ -72,14 +75,15 @@ export const useHighestReboundsGame = () => {
         .gte('game_date', '2024-10-01')
         .lte('game_date', '2025-06-30')
         .order("rebounds", { ascending: false })
-        .limit(5);
+        .limit(1)
+        .maybeSingle();
 
       if (error) {
         console.error("Error fetching highest rebounds game:", error);
         throw error;
       }
 
-      return data as BoxScore[];
+      return data as BoxScore | null;
     },
   });
 };
@@ -88,16 +92,12 @@ export const useRecentUniqueGames = () => {
   return useQuery({
     queryKey: ["recent-unique-games"],
     queryFn: async () => {
-      let query = supabase
+      const { data, error } = await supabase
         .from("box_scores")
-        .select("*") as any;
-
-      query = query
-        .eq("first_time_combination", true)
+        .select("*")
+        .eq("is_unique", true)
         .order("game_date", { ascending: false })
         .limit(3);
-
-      const { data, error } = await query;
 
       if (error) {
         console.error("Error fetching recent unique games:", error);
@@ -113,61 +113,24 @@ export const useBoxScores = (searchQuery: string = "") => {
   return useQuery({
     queryKey: ["box-scores", searchQuery],
     queryFn: async () => {
-      try {
-        let query = supabase
-          .from("box_scores")
-          .select("*") as any;
-        
-        query = query
-          .eq("first_time_combination", true)
-          .order("game_date", { ascending: false });
+      let query = supabase
+        .from("box_scores")
+        .select("*")
+        .eq("is_unique", true)
+        .order("game_date", { ascending: false });
 
-        if (searchQuery) {
-          query = query.ilike("player_name", `%${searchQuery}%`);
-        }
-
-        const { data, error } = await query;
-
-        if (error) {
-          console.error("Error fetching box scores:", error);
-          return [];
-        }
-
-        console.log('Raw data from Supabase:', data);
-
-        const sanitizedData = (data || []).map(record => {
-          try {
-            const dateValue = record.game_date;
-            let validDate = null;
-            
-            if (dateValue) {
-              const parsedDate = new Date(dateValue);
-              if (!isNaN(parsedDate.getTime())) {
-                validDate = parsedDate.toISOString().split('T')[0];
-              }
-            }
-
-            return {
-              ...record,
-              game_date: validDate
-            };
-          } catch (err) {
-            console.error("Error processing record:", record);
-            return {
-              ...record,
-              game_date: null
-            };
-          }
-        });
-
-        return sanitizedData;
-      } catch (err) {
-        console.error("Unexpected error:", err);
-        return [];
+      if (searchQuery) {
+        query = query.ilike("player_name", `%${searchQuery}%`);
       }
+
+      const { data, error } = await query;
+
+      if (error) {
+        console.error("Error fetching box scores:", error);
+        throw error;
+      }
+
+      return data as BoxScore[];
     },
-    retry: 3,
-    initialData: [],
-    staleTime: 1000 * 60 * 5,
   });
 };
