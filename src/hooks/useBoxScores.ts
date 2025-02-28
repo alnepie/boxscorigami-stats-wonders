@@ -109,26 +109,40 @@ export const useBoxScores = (searchQuery: string = "") => {
   return useQuery({
     queryKey: ["box-scores", searchQuery],
     queryFn: async () => {
-      let query = supabase
-        .from("box_scores")
-        .select("*") as any;
-      
-      query = query
-        .eq("first_time_combination", true)
-        .order("game_date", { ascending: false });
+      try {
+        let query = supabase
+          .from("box_scores")
+          .select("*") as any;
+        
+        query = query
+          .eq("first_time_combination", true)
+          .order("game_date", { ascending: false });
 
-      if (searchQuery) {
-        query = query.ilike("player_name", `%${searchQuery}%`);
+        if (searchQuery) {
+          query = query.ilike("player_name", `%${searchQuery}%`);
+        }
+
+        const { data, error } = await query;
+
+        if (error) {
+          console.error("Error fetching box scores:", error);
+          return [];
+        }
+
+        // Sanitize the data to ensure valid dates
+        const sanitizedData = (data || []).map(record => ({
+          ...record,
+          // Ensure game_date is a valid date string or null
+          game_date: record.game_date ? new Date(record.game_date).toISOString() : null
+        }));
+
+        return sanitizedData;
+      } catch (err) {
+        console.error("Unexpected error:", err);
+        return [];
       }
-
-      const { data, error } = await query;
-
-      if (error) {
-        console.error("Error fetching box scores:", error);
-        throw error;
-      }
-
-      return data as BoxScore[];
     },
+    retry: 3,
+    initialData: [],
   });
 };
