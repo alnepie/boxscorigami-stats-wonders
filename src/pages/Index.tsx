@@ -1,4 +1,3 @@
-
 import { Search } from "@/components/Search";
 import { StatCard } from "@/components/StatCard";
 import { ImportButton } from "@/components/ImportButton";
@@ -78,6 +77,12 @@ const Index = () => {
       free_throws_attempted: 2
     }
   ];
+
+  // Add error boundary for the dynamic data
+  const safeRecentUniqueGames = recentUniqueGames?.map(game => ({
+    ...game,
+    game_date: game.game_date ? new Date(game.game_date).toISOString().split('T')[0] : null
+  })) || [];
 
   if (error) {
     toast({
@@ -206,7 +211,7 @@ const Index = () => {
         </div>
 
         {/* Recent Unique Statlines Section */}
-        {!isLoadingRecentUnique && recentUniqueGames && recentUniqueGames.length > 0 && (
+        {!isLoadingRecentUnique && safeRecentUniqueGames.length > 0 && (
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -216,7 +221,7 @@ const Index = () => {
             <h2 className="text-2xl font-bold text-center">Recent Unique Statlines</h2>
             <p className="text-center text-muted-foreground">These stat combinations have only occurred once in NBA history</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {recentUniqueGames.map((game, index) => (
+              {safeRecentUniqueGames.map((game, index) => (
                 <motion.div
                   key={game.id}
                   initial={{ opacity: 0, y: 20 }}
