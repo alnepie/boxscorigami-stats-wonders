@@ -129,7 +129,7 @@ const Index = () => {
             </div>
             <div className="max-w-md mx-auto">
               <img 
-                src="/images/output.png" 
+                src="/images/pareto-viz.png" 
                 alt="3D Pareto Principle Visualization of Game Stats" 
                 className="w-full h-auto rounded-lg shadow-lg"
               />
