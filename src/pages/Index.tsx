@@ -104,7 +104,7 @@ const Index = () => {
           <div className="text-lg text-muted-foreground max-w-3xl mx-auto space-y-4">
             <h3 className="font-medium text-xl">What is BoxScorigami?</h3>
             <p>
-              You might have seen Scorigami, a concept thought by Jon Bois, which tracks final scores that never happened in NFL history. BoxScorigami tracks unique statlines (Points, Rebounds and Assists) in the NBA. If we were to apply Pareto principle ideas to this, the list would be dominated by Wilt Chamberlain who had monster statlines (53 points, 32 rebounds, 14 assists!). Instead it's fascinating to see different players here such as Draymond who makes my personal list.
+              You might have seen Scorigami, a concept thought by Jon Bois, which tracks final scores that never happened in NFL history. BoxScorigami tracks unique statlines (Points, Rebounds and Assists) in the NBA. 
             </p>
           </div>
           {isAdmin && (
