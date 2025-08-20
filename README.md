@@ -1,8 +1,5 @@
 
 
-(https://lovable.dev/projects/b193cfc7-6f36-48da-bbd1-16041eba8878) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
 
 **Use your preferred IDE**
 
